@@ -1,0 +1,16 @@
+networks:
+  default:
+    external:
+      name: proxyNET
+
+services:
+  proxy:
+    image: DOCKER
+    container_name: CONTAINER
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - DATADIR/html:/usr/local/apache2/htdocs
+      - DATADIR/logs:/usr/local/apache2/logs

@@ -1,0 +1,2 @@
+#!/bin/bash
+docker-compose -f proxy-compose.yml up -d

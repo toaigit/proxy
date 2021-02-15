@@ -1,0 +1,16 @@
+networks:
+  default:
+    external:
+      name: proxyNET
+
+services:
+  proxy:
+    image: proxy
+    container_name: proxysvr
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - /home/toaivo/data/proxy/html:/usr/local/apache2/htdocs
+      - /home/toaivo/data/proxy/logs:/usr/local/apache2/logs

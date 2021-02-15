@@ -1,0 +1,55 @@
+#   virtual host temmplate
+
+<VirtualHost *:80>
+    ServerAdmin webmaster@resourceonline.org
+    DocumentRoot "/usr/local/apache2/htdocs
+    ServerName SITENAME
+    ErrorLog "logs/SHORTNAME-error_log"
+    CustomLog "logs/SHORTNAME-access_log" common
+
+    Redirect / https://SITENAME
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerAdmin webmaster@resourceonline.org
+    DocumentRoot "/usr/local/apache2/htdocs
+    ServerName SITENAME:443
+    ErrorLog "logs/SHORTNAME-ssl-error_log"
+    CustomLog "logs/SHORTNAME-ssl-access_log" common
+
+    SSLEngine on
+    SSLCertificateFile "/usr/local/apache2/certs/SHORTNAME-server.crt"
+    SSLCertificateKeyFile "/usr/local/apache2/certs/SHORTNAME-server.key"
+    SSLCertificateChainFile "/usr/local/apache2/certs/SHORTNAME-ca.crt"
+
+    SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+    SSLHonorCipherOrder on
+    SSLCipherSuite "EECDH+ECDSA+AESGCM EECDH+aRSA+AESGCM EECDH+ECDSA+SHA384 EECDH+ECDSA+SHA256 EECDH+aRSA+SHA384 EECDH+aRSA+SHA256 EECDH+aRSA+RC4 EECDH EDH+aRSA RC4 !aNULL !eNULL !LOW !3DES !MD5 !EXP !PSK !SRP !DSS !RC4"
+
+    <FilesMatch "\.(cgi|shtml|phtml|php)$">
+        SSLOptions +StdEnvVars
+    </FilesMatch>
+    <Directory "/usr/local/apache2/cgi-bin">
+         SSLOptions +StdEnvVars
+    </Directory>
+
+    BrowserMatch "MSIE [2-5]" \
+         nokeepalive ssl-unclean-shutdown \
+         downgrade-1.0 force-response-1.0
+
+    SSLProxyEngine on
+    SSLProxyVerify none
+    SSLProxyCheckPeerCN off
+    SSLProxyCheckPeerName off
+    ProxyRequests off
+
+    <Proxy *>
+	Order deny,allow
+	Deny from all
+	Allow from all
+    </Proxy>
+    ProxyPass / https://SITENAME/
+    ProxyPassReverse  / https://SITENAME/
+ProxyTimeout 300
+
+</VirtualHost>

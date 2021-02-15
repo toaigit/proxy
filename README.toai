@@ -1,0 +1,24 @@
+I use proxy server to host multiple websites using one IP address.
+
+You need to have SSL Certs for proxy server (www) and other vhosts in the build/files/certs folder.
+    - vhostName-server.key, vhostName-server.crt, vhostName-ca.crt
+    - NOTE: you don't have to copy the certs to the container. You can define the location during the runtime.
+The generated name-vhost.conf(s) define proxy for the vhost such as wpress, support, etc .
+    - These generated vhost files are under build/files/apache/vhosts (i.e., vhostName-vhost.conf)
+Runtime storage Mapping
+    - DATADIR/proxy/logs:/usr/local/apache2/logs (Mapping logs to local/hosts storage)
+    - DATADIR/proxy/html:/usr/local/apache2/htdocs (Mapping DocumentRoot to local/hosts storage)
+    - DATADIR/proxy/certs:/usr/local/apache2/certs (optional)
+
+BUILD PROCESS
+
+cd build
+Update vars.env per your environment.
+Run gen-vars.sh (this will generate config file for www default virtual host and docker compose yml file)
+for each virtual host
+   update vars.env for this virtual host.
+   Run gen-vhost.sh
+done
+Run build.sh (will build a docker image)
+Run startup to startup the container
+
